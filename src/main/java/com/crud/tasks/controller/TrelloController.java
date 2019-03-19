@@ -20,19 +20,21 @@ public class TrelloController {
     private TrelloClient trelloClient;
 
     @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
-    public void getTrelloBoards() {
+    public List<TrelloBoardDto> getTrelloBoards() {
 
-        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
+        return  trelloClient.getTrelloBoards();
 
-        trelloBoards.forEach(trelloBoardDto -> {
+     //   List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
 
-                    System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
-
-                    System.out.println("This board contains lists: ");
-
-                    trelloBoardDto.getLists().forEach(trelloList ->
-                            System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
-                });
+//        trelloBoards.forEach(trelloBoardDto -> {
+//
+//                    System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
+//
+//                    System.out.println("This board contains lists: ");
+//
+//                    trelloBoardDto.getLists().forEach(trelloList ->
+//                            System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
+//                });
 
 
             //  trelloBoards.forEach
@@ -40,9 +42,9 @@ public class TrelloController {
 
 
 
-
-        trelloBoards.stream().filter(trelloBoardDto -> trelloBoardDto.getName().contains("Kodilla")).forEach
-                (trelloBoardDto -> System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
+//
+//        trelloBoards.stream().filter(trelloBoardDto -> trelloBoardDto.getName().contains("Kodilla")).forEach
+//                (trelloBoardDto -> System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
 
     }
 
@@ -50,11 +52,6 @@ public class TrelloController {
     public CreatedTrelloCard createdTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
 
         CreatedTrelloCard card = trelloClient.createNewCard(trelloCardDto);
-        System.out.println(card.getBadgesDto().getVotes());
-        System.out.println(card.getBadgesDto().getAttachmentsByTypeDto().getTrelloDto().getBoard());
-        System.out.println(card.getBadgesDto().getAttachmentsByTypeDto().getTrelloDto().getCard());
-
-
         return card;
     }
 }
