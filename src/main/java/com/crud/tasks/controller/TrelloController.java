@@ -16,11 +16,6 @@ import java.util.List;
 @CrossOrigin("*")
 public class TrelloController {
 
-    @Autowired
-    private TrelloClient trelloClient;
-
-    @Autowired
-    private TrelloService trelloService;
 
     @Autowired
     private TrelloFacade trelloFacade;
