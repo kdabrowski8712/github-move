@@ -1,6 +1,7 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
+import com.crud.tasks.domain.MailType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +23,26 @@ public class    SimpleEmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleMailMessage.class);
 
-    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+    private MimeMessagePreparator createMimeMessage(final Mail mail, MailType.Types mailType) {
         return mimeMessage -> {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
             mimeMessageHelper.setTo(mail.getMailTo());
             mimeMessageHelper.setSubject(mail.getSubject());
-            mimeMessageHelper.setText(mailCreatorService.buildTrelloCardMail(mail.getMessage()),true);
+            if(mailType.equals(MailType.Types.TRELLO)) {
+                mimeMessageHelper.setText(mailCreatorService.buildTrelloCardMail(mail.getMessage()), true);
+            }
+            else if(mailType.equals(MailType.Types.DAILYQUANTITY)) {
+                mimeMessageHelper.setText(mailCreatorService.buildQuantityTaskMail(mail.getMessage()), true);
+            }
 
         };
     }
 
-    public void send(final Mail mail) {
+    public void send(final Mail mail, MailType.Types mailType) {
         LOGGER.info("Starting mail preapration...");
         try {
             //SimpleMailMessage simpleMailMessage = createMailMessagr(mail);
-            javaMailSender.send(createMimeMessage(mail));
+            javaMailSender.send(createMimeMessage(mail,mailType));
             LOGGER.info("Email has been sent");
         }
         catch(MailException e) {
